@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天尊神域对战徽章 DEMO</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="home-container" style="background-image: url('images/home-background.png');">
+        <div id="button-container">
+            <button id="start-game-btn" class="menu-btn">开始游戏</button>
+            <button id="network-game-btn" class="menu-btn">网络对战</button>
+            <button id="game-rules-btn" class="menu-btn">游戏说明</button>
+        </div>
+    </div>
+
+    <div id="rules-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>游戏说明</h2>
+            <div class="rules-content">
+                <p><strong>🎮 基本操作：</strong></p>
+                <ul>
+                    <li>有圆点环绕的徽章即可开始回合</li>
+                    <li>点击徽章使圆点停下，圆点的方位为徽章跳跃方向</li>
+                    <li>下方滑动的圆点也是点击停下，决定力度然后跳跃</li>
+                </ul>
+                
+                <p><strong>⚔️ 游戏判定：</strong></p>
+                <ul>
+                    <li>进攻方徽章压在对方<b style="color: #ff6b6b;">外圈</b> → 扣除 <strong>50%</strong> 生命值</li>
+                    <li>进攻方徽章压在对方<b style="color: #ff6b6b;">内圈</b> → 扣除 <strong>100%</strong> 生命值</li>
+                    <li>进攻方若造成对方伤害即获得<b style="color: #ffcc00;">无敌效果</b>，直至对方回合结束</li>
+                    <li>徽章出界 → 扣除 <strong>25%</strong> 生命值</li>
+                    <li>生命值归 0 → 另一方需要2步夺取黄金圣杯才能获得胜利，否则生命值归0的玩家将会复活50%生命值，继续比赛</li>
+                </ul>
+                
+                <p><strong>🗺️ 地图元素：</strong></p>
+                <ul>
+                    <li><span style="color: #33aa33; font-weight: bold;">❤ 恢复格子</span>：恢复 <strong>50%</strong> 生命值，触发后格子会移动到其他区域</li>
+                    <li><span style="color: #aa3333; font-weight: bold;">⚠ 陷阱格子</span>：暂停一回合</li>
+                </ul>
+            </div>
+            <button id="close-rules-btn" class="modal-btn">返回</button>
+        </div>
+    </div>
+
+    <div id="credits-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>制作人员</h2>
+            <div class="credits-content">
+                <p><strong>游戏设计与开发</strong></p>
+                <p>AI Game Studio</p>
+                <br>
+                <p><strong>特别感谢</strong></p>
+                <p>感谢使用本游戏 DEMO 版本</p>
+                <br>
+                <p><strong>版本信息</strong></p>
+                <p>Version 1.0 DEMO</p>
+            </div>
+            <button id="close-credits-btn" class="modal-btn">返回</button>
+        </div>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>

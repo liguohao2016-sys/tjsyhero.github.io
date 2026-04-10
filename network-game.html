@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天尊神域对战徽章 - 网络对战</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="ui-top">
+            <div id="player1-ui" class="player-ui">
+                <div class="player-name">玩家 1</div>
+                <div class="health-bar-container">
+                    <div id="player1-health" class="health-bar"></div>
+                </div>
+                <div class="health-text"><span id="player1-health-text">100</span>%</div>
+                <div id="player1-skip" class="skip-indicator"></div>
+            </div>
+            <div id="turn-indicator">
+                <div id="turn-text">回合：1</div>
+                <div id="current-player">当前玩家：1</div>
+            </div>
+            <div id="player2-ui" class="player-ui">
+                <div class="player-name">玩家 2</div>
+                <div class="health-bar-container">
+                    <div id="player2-health" class="health-bar"></div>
+                </div>
+                <div class="health-text"><span id="player2-health-text">100</span>%</div>
+                <div id="player2-skip" class="skip-indicator"></div>
+            </div>
+        </div>
+        <div id="game-content">
+            <canvas id="game-canvas"></canvas>
+        </div>
+        <div id="power-slider-container" class="hidden">
+            <div class="slider-label">力度调节</div>
+            <div id="power-slider">
+                <div id="power-handle"></div>
+            </div>
+        </div>
+        <div id="game-over" class="hidden">
+            <div id="winner-badge" class="winner-badge"></div>
+            <div id="winner-text"></div>
+            <button id="restart-btn">重新开始</button>
+        </div>
+        <button id="back-home-btn" class="back-btn">返回首页</button>
+    </div>
+    <script src="network-game.js"></script>
+</body>
+</html>

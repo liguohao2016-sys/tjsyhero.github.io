@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择徽章 - 天尊神域对战徽章</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #select-badge-container {
+            text-align: center;
+            padding: 20px;
+            background-image: url('images/select-background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+                        0 0 100px rgba(255, 204, 0, 0.15);
+            border: 2px solid rgba(255, 204, 0, 0.3);
+            width: 500px;
+            height: 800px;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+        }
+
+        #select-badge-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        #select-badge-title {
+            font-size: 36px;
+            background: linear-gradient(45deg, #ffcc00, #ffaa00, #ffcc00, #ffaa00, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+            text-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
+            margin: 0;
+        }
+
+        #back-to-home-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 204, 0, 0.5);
+            border-radius: 15px;
+            cursor: pointer;
+            color: #ffcc00;
+            transition: all 0.3s ease;
+        }
+
+        #back-to-home-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            border-color: #ffcc00;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+            transform: translateY(-1px);
+        }
+
+        #selection-content {
+            display: flex;
+            flex: 1;
+            gap: 20px;
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+
+        /* 玩家预览区 */
+        #players-preview-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .player-preview {
+            text-align: center;
+            flex: 1;
+        }
+
+        .player-title {
+            font-size: 20px;
+            color: #ffcc00;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            }
+            50% {
+                transform: scale(1.1);
+                text-shadow: 0 0 25px rgba(255, 204, 0, 1), 0 0 35px rgba(255, 204, 0, 0.6);
+            }
+        }
+
+        .badge-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 204, 0, 0.3) 0%, rgba(255, 165, 0, 0.2) 70%, transparent 100%);
+            border: 4px solid rgba(255, 204, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+            margin: 0 auto;
+        }
+
+        .badge-preview.has-badge {
+            border-color: #ffcc00;
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.8);
+        }
+
+        .badge-preview-inner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.3s ease;
+        }
+
+        .badge-preview.has-badge .badge-preview-inner {
+            transform: scale(1.1);
+        }
+
+        .badge-preview-outer {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #ffcc00, #ffaa00, #ffcc00) 1;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 徽章选择区 */
+        .selection-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 20px;
+        }
+
+        .selection-title {
+            font-size: 24px;
+            color: #ffcc00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
+            animation: pulse-glow 2s ease-in-out infinite;
+            text-align: center;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 204, 0, 0.3);
+            justify-content: center;
+        }
+
+        .badge-option {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #ffcc00;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            outline: none;
+            background-color: #ffcc00;
+        }
+
+        .badge-option:hover:not(.selected):not(.disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+        }
+
+        .badge-option.selected {
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.8);
+            transform: scale(1.1);
+            border-color: #ff6b6b;
+        }
+
+        .badge-option.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        /* AI难度选择按钮样式 */
+        .ai-difficulty-container {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ai-difficulty-btn {
+            padding: 4px 8px;
+            border: 1px solid;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 11px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .ai-difficulty-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .ai-difficulty-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+        }
+
+        /* 玩家按钮 */
+        .player-btn {
+            border-color: #4CAF50;
+            color: #4CAF50;
+        }
+
+        .player-btn.active {
+            background: linear-gradient(145deg, #4CAF50, #45a049);
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        /* 简单AI按钮 */
+        .easy-btn {
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+
+        .easy-btn.active {
+            background: linear-gradient(145deg, #2196F3, #1976D2);
+            color: white;
+            border-color: #2196F3;
+        }
+
+        /* 中等AI按钮 */
+        .medium-btn {
+            border-color: #FF9800;
+            color: #FF9800;
+        }
+
+        .medium-btn.active {
+            background: linear-gradient(145deg, #FF9800, #F57C00);
+            color: white;
+            border-color: #FF9800;
+        }
+
+        /* 困难AI按钮 */
+        .hard-btn {
+            border-color: #f44336;
+            color: #f44336;
+        }
+
+        .hard-btn.active {
+            background: linear-gradient(145deg, #f44336, #da190b);
+            color: white;
+            border-color: #f44336;
+        }
+        #action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        #next-btn, #start-battle-btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: linear-gradient(145deg, #ffcc00, #ffaa00, #ffcc00);
+            border: 2px solid rgba(255, 204, 0, 0.5);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #0a0a0a;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.5), 
+                        0 10px 30px rgba(255, 204, 0, 0.4),
+                        inset 0 2px 10px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #next-btn:hover, #start-battle-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 204, 0, 0.8),
+                        0 15px 40px rgba(255, 204, 0, 0.6),
+                        inset 0 2px 10px rgba(255, 255, 255, 0.4);
+        }
+
+        #next-btn:disabled, #start-battle-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <div id="select-badge-container">
+        <div id="select-badge-header">
+            <button id="back-to-home-btn">返回首页</button>
+            <!-- AI难度选择按钮组 -->
+            <div id="ai-difficulty-container" class="ai-difficulty-container">
+                <button class="ai-difficulty-btn player-btn" data-difficulty="player">玩家</button>
+                <button class="ai-difficulty-btn easy-btn active" data-difficulty="easy">电脑弱</button>
+                <button class="ai-difficulty-btn medium-btn" data-difficulty="medium">电脑中</button>
+                <button class="ai-difficulty-btn hard-btn" data-difficulty="hard">电脑强</button>
+            </div>
+        </div>
+        
+        <!-- 玩家预览区 -->
+        <div id="players-preview-container">
+            <div class="player-preview">
+                <div id="player1-preview" class="badge-preview">
+                    <div class="badge-preview-outer"></div>
+                    <div id="player1-badge-inner" class="badge-preview-inner"></div>
+                </div>
+            </div>
+            
+            <div class="player-preview">
+                <div id="player2-preview" class="badge-preview">
+                    <div class="badge-preview-outer"></div>
+                    <div id="player2-badge-inner" class="badge-preview-inner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 徽章选择区 -->
+        <div class="selection-area">
+            <h2 id="selection-title" class="selection-title">玩家 1 请选择徽章</h2>
+            <div id="badges-container" class="badges-grid">
+                <!-- 徽章选项将通过JavaScript动态生成 -->
+            </div>
+        </div>
+
+        <div id="action-buttons">
+            <button id="next-btn" disabled>下一步</button>
+            <button id="start-battle-btn" disabled>开始战斗</button>
+        </div>
+    </div>
+
+    <script>
+        // 徽章选择页面背景音乐
+        const selectBgm = new Audio('audio/select bgm.mp3');
+        // 点击音效
+        const tapSound = new Audio('audio/tap.mp3');
+        
+        // 初始化徽章选择页面音频
+        function initSelectAudio() {
+            selectBgm.loop = true;
+            selectBgm.volume = 0.5;
+            
+            // 尝试自动播放
+            selectBgm.play().catch(e => {
+                console.log('徽章选择页面BGM自动播放失败，等待用户交互:', e);
+                // 监听用户交互事件，在用户交互后播放
+                function playOnInteraction() {
+                    selectBgm.play().catch(e => console.log('徽章选择页面BGM播放失败:', e));
+                    // 移除事件监听器，避免重复触发
+                    document.removeEventListener('click', playOnInteraction);
+                    document.removeEventListener('touchstart', playOnInteraction);
+                    document.removeEventListener('keydown', playOnInteraction);
+                }
+                
+                // 添加多种交互事件监听器
+                document.addEventListener('click', playOnInteraction);
+                document.addEventListener('touchstart', playOnInteraction);
+                document.addEventListener('keydown', playOnInteraction);
+            });
+        }
+        
+        // 停止徽章选择页面音频
+        function stopSelectAudio() {
+            selectBgm.pause();
+        }
+        
+        // 播放点击音效
+        function playTapSound() {
+            tapSound.currentTime = 0;
+            tapSound.play().catch(e => console.log('点击音效播放失败:', e));
+        }
+        
+        // 徽章数据
+        const badges = [
+            { id: 1, name: '天尊悟空', innerImage: 'images/badge1.png' },
+            { id: 2, name: '天尊哪吒', innerImage: 'images/badge2.png' },
+            { id: 3, name: '徽章3', innerImage: 'images/badge3.png' },
+            { id: 4, name: '徽章4', innerImage: 'images/badge4.png' },
+            { id: 5, name: '徽章5', innerImage: 'images/badge5.png' },
+            { id: 6, name: '徽章6', innerImage: 'images/badge6.png' },
+            { id: 7, name: '徽章7', innerImage: 'images/badge7.png' },
+            { id: 8, name: '徽章8', innerImage: 'images/badge8.png' },
+            { id: 9, name: '徽章9', innerImage: 'images/badge9.png' }
+        ];
+
+        let selectedBadges = {
+            player1: null,
+            player2: null
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化音频
+            initSelectAudio();
+            
+            const badgesContainer = document.getElementById('badges-container');
+            const startBattleBtn = document.getElementById('start-battle-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const backToHomeBtn = document.getElementById('back-to-home-btn');
+            const selectionTitle = document.getElementById('selection-title');
+            const player1BadgePreview = document.getElementById('player1-preview');
+            const player2BadgePreview = document.getElementById('player2-preview');
+            const player1BadgeInner = document.getElementById('player1-badge-inner');
+            const player2BadgeInner = document.getElementById('player2-badge-inner');
+
+            let currentPlayer = 'player1'; // 当前选择的玩家
+            let selectedBadgeIds = []; // 已选择的徽章ID列表
+
+            // 生成徽章选项
+            function generateBadgeOptions() {
+                badgesContainer.innerHTML = '';
+                badges.forEach(badge => {
+                    const badgeOption = document.createElement('div');
+                    badgeOption.className = 'badge-option';
+                    badgeOption.dataset.badgeId = badge.id;
+                    
+                    // 如果徽章已被选择，添加禁用状态
+                    if (selectedBadgeIds.includes(badge.id)) {
+                        badgeOption.classList.add('disabled');
+                    }
+                    
+                    // 设置徽章图片
+                    if (badge.innerImage) {
+                        badgeOption.style.backgroundImage = `url('${badge.innerImage}')`;
+                    } else {
+                        // 默认黄色背景
+                        badgeOption.style.backgroundColor = '#ffcc00';
+                        badgeOption.style.opacity = '0.7';
+                    }
+                    
+                    // 添加点击事件
+                    badgeOption.addEventListener('click', function() {
+                        if (!this.classList.contains('disabled')) {
+                            selectBadge(this);
+                        }
+                    });
+                    
+                    badgesContainer.appendChild(badgeOption);
+                });
+            }
+
+            // 选择徽章
+            function selectBadge(badgeElement) {
+                // 播放点击音效
+                playTapSound();
+                
+                const badgeId = parseInt(badgeElement.dataset.badgeId);
+                const badge = badges.find(b => b.id === badgeId);
+                
+                if (!badge) return;
+                
+                // 如果当前玩家已经选择了徽章，先从已选择列表中移除
+                const previousBadgeId = selectedBadges[currentPlayer];
+                if (previousBadgeId) {
+                    const index = selectedBadgeIds.indexOf(previousBadgeId);
+                    if (index > -1) {
+                        selectedBadgeIds.splice(index, 1);
+                    }
+                }
+                
+                // 更新选中状态
+                selectedBadges[currentPlayer] = badgeId;
+                selectedBadgeIds.push(badgeId);
+                
+                // 更新预览
+                updatePreview(currentPlayer, badge);
+                
+                // 重新生成徽章选项
+                generateBadgeOptions();
+                
+                // 检查当前玩家是否选择完成
+                if (currentPlayer === 'player1') {
+                    // 玩家1选择完成，启用下一步按钮
+                    nextBtn.disabled = false;
+                } else {
+                    // 玩家2选择完成，检查是否可以开始游戏
+                    checkStartGame();
+                }
+            }
+
+            // 更新预览
+            function updatePreview(player, badge) {
+                const previewElement = player === 'player1' ? player1BadgePreview : player2BadgePreview;
+                const innerElement = player === 'player1' ? player1BadgeInner : player2BadgeInner;
+                const outerElement = previewElement.querySelector('.badge-preview-outer');
+                
+                previewElement.classList.add('has-badge');
+                
+                if (badge.innerImage) {
+                    innerElement.style.backgroundImage = `url('${badge.innerImage}')`;
+                } else {
+                    innerElement.style.backgroundColor = '#ffcc00';
+                    innerElement.style.opacity = '0.7';
+                }
+                
+                // 设置外圈颜色
+                let outerColor = '';
+                switch(badge.id) {
+                    case 1:
+                        outerColor = 'linear-gradient(45deg, #ffcc00, #ffaa00, #ffcc00)'; // 黄色
+                        break;
+                    case 2:
+                    case 5:
+                        outerColor = 'linear-gradient(45deg, #ff3742, #ff1744, #ff3742)'; // 鲜艳红色
+                        break;
+                    case 3:
+                    case 9:
+                        outerColor = 'linear-gradient(45deg, #00b0ff, #0088ff, #00b0ff)'; // 明亮蓝色
+                        break;
+                    case 6:
+                        outerColor = 'linear-gradient(45deg, #1dd1a1, #10ac84, #1dd1a1)'; // 绿色
+                        break;
+                    case 4:
+                    case 7:
+                    case 8:
+                        outerColor = 'linear-gradient(45deg, #d65aff, #8e44ad, #d65aff)'; // 鲜艳紫色
+                        break;
+                    default:
+                        outerColor = 'linear-gradient(45deg, #ffcc00, #ffaa00, #ffcc00)'; // 默认黄色
+                }
+                
+                if (outerElement) {
+                    outerElement.style.borderImage = `${outerColor} 1`;
+                }
+            }
+
+            // 切换到玩家2选择
+            function switchToPlayer2() {
+                currentPlayer = 'player2';
+                selectionTitle.textContent = '玩家 2 请选择徽章';
+                nextBtn.disabled = true;
+                nextBtn.style.display = 'none';
+                startBattleBtn.style.display = 'inline-block';
+                
+                // 重新生成徽章选项（已禁用玩家1选择的徽章）
+                generateBadgeOptions();
+            }
+
+            // 检查是否可以开始游戏
+            function checkStartGame() {
+                if (selectedBadges.player1 && selectedBadges.player2) {
+                    startBattleBtn.disabled = false;
+                } else {
+                    startBattleBtn.disabled = true;
+                }
+            }
+
+            // 生成初始徽章选项
+            generateBadgeOptions();
+
+            // 获取AI难度按钮
+            const difficultyBtns = document.querySelectorAll('.ai-difficulty-btn');
+            let currentDifficulty = 'easy'; // 默认难度
+            
+            // 难度按钮点击事件
+            difficultyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 播放点击音效
+                    playTapSound();
+                    
+                    // 移除所有按钮的active状态
+                    difficultyBtns.forEach(b => b.classList.remove('active'));
+                    // 添加当前按钮的active状态
+                    this.classList.add('active');
+                    // 更新当前难度
+                    currentDifficulty = this.dataset.difficulty;
+                    console.log('选择的难度:', currentDifficulty);
+                    
+                    // 根据难度调整界面
+                    if (currentDifficulty !== 'player') {
+                        // AI模式：自动选择玩家1的徽章
+                        if (!selectedBadges.player1) {
+                            const defaultBadge = badges[0]; // 使用第一个徽章作为默认
+                            selectedBadges.player1 = defaultBadge.id;
+                            selectedBadgeIds = [defaultBadge.id];
+                            updatePreview('player1', defaultBadge);
+                            generateBadgeOptions();
+                            nextBtn.disabled = false;
+                        }
+                    }
+                });
+            });
+
+            // 下一步按钮点击事件
+            nextBtn.addEventListener('click', function() {
+                // 播放点击音效
+                playTapSound();
+                
+                // 如果是AI模式，自动为玩家1选择徽章（如果还没选择）
+                if (currentDifficulty !== 'player' && !selectedBadges.player1) {
+                    const defaultBadge = badges[0]; // 使用第一个徽章作为默认
+                    selectedBadges.player1 = defaultBadge.id;
+                    selectedBadgeIds = [defaultBadge.id];
+                    updatePreview('player1', defaultBadge);
+                    generateBadgeOptions();
+                }
+                switchToPlayer2();
+            });
+
+            // 开始战斗按钮点击事件
+            startBattleBtn.addEventListener('click', function() {
+                // 播放点击音效
+                playTapSound();
+                
+                if (selectedBadges.player1 && selectedBadges.player2) {
+                    // 停止徽章选择页面背景音乐
+                    stopSelectAudio();
+                    
+                    // 保存选中的徽章到localStorage
+                    const gameData = {
+                        selectedBadges: selectedBadges,
+                        badgeColors: {
+                            player1: getBadgeColor(selectedBadges.player1),
+                            player2: getBadgeColor(selectedBadges.player2)
+                        },
+                        isAI: currentDifficulty !== 'player', // 保存AI设置状态
+                        aiDifficulty: currentDifficulty // 保存AI难度
+                    };
+                    localStorage.setItem('gameData', JSON.stringify(gameData));
+                    
+                    // 跳转到游戏页面
+                    window.location.href = 'game.html';
+                }
+            });
+            
+            // 获取徽章颜色
+            function getBadgeColor(badgeId) {
+                switch(badgeId) {
+                    case 1: return '#ffcc00'; // 黄色
+                    case 2:
+                    case 5: return '#ff3742'; // 鲜艳红色
+                    case 3:
+                    case 9: return '#00b0ff'; // 明亮蓝色
+                    case 6: return '#1dd1a1'; // 绿色
+                    case 4:
+                    case 7:
+                    case 8: return '#d65aff'; // 鲜艳紫色
+                    default: return '#ffcc00'; // 默认黄色
+                }
+            }
+
+            // 返回首页按钮点击事件
+            backToHomeBtn.addEventListener('click', function() {
+                // 播放点击音效
+                playTapSound();
+                // 停止徽章选择页面背景音乐
+                stopSelectAudio();
+                window.location.href = 'index.html';
+            });
+
+
+        });
+    </script>
+</body>
+</html>
